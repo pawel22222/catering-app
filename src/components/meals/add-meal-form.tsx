@@ -4,20 +4,17 @@ import { useFormik } from "formik";
 import { Yup } from "../yup";
 import { InputText, Textarea, InputNumber } from "../form-utils";
 import { Button } from "../button";
-import { type MealDto } from "@/types/meals";
 import { useRouter } from "next/navigation";
 import { Spinner } from "../spinner";
+import { addMeal } from "@/db-service/meals";
+import { MealDto } from "@/types/meals";
 
 export const AddMealForm = () => {
   const router = useRouter();
 
-  const formik = useFormik({
-    onSubmit: async (values: MealDto) => {
-      await fetch("/api/meals", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
+  const formik = useFormik<MealDto>({
+    onSubmit: async (values) => {
+      await addMeal(values);
       formik.resetForm();
       router.refresh();
     },

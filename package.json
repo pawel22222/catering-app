@@ -9,8 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/better-sqlite3": "^7.6.13",
-    "better-sqlite3": "^11.10.0",
+    "@supabase/supabase-js": "^2.52.1",
     "clsx": "^2.1.1",
     "formik": "^2.4.6",
     "next": "15.4.4",
@@ -27,6 +26,7 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.4.4",
+    "supabase": "^2.31.8",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

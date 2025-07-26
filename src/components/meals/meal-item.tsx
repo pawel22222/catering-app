@@ -1,21 +1,18 @@
 "use client";
 
-import { MealShort } from "@/types/meals";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Spinner } from "../spinner";
 import { useFormik } from "formik";
+import { deleteMeal } from "@/db-service/meals";
+import { MealShort } from "@/types/meals";
 
 export const MealItem = ({ meal }: { meal: MealShort }) => {
   const router = useRouter();
 
   const formik = useFormik({
-    onSubmit: () => {
-      fetch("/api/meals/", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(meal.id),
-      });
+    onSubmit: async () => {
+      await deleteMeal(meal.id);
       router.refresh();
     },
     initialValues: {},

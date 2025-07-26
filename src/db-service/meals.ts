@@ -1,34 +1,40 @@
-import { db } from "@/db";
-import type { MealShort, Meal, MealDto } from "@/types/meals";
-
-async function timeout(timeout: number = 0) {
-  return await new Promise((resolve) => setTimeout(resolve, timeout));
-}
+import { supabase } from "@/lib/supabase";
+import { MealDto } from "@/types/meals";
 
 export const getMeals = async () => {
-  await timeout();
-  return db.prepare<[], MealShort>("SELECT * FROM meals").all();
+  const { data, error } = await supabase
+    .from("meals")
+    .select("id, title, price");
+
+  if (error) throw error;
+  return data;
 };
 
-export const getMealById = async (id: string) => {
-  await timeout();
-  return db
-    .prepare<[string], Meal>("SELECT * FROM meals WHERE meals.id = ?")
-    .get(id);
+export const getMealById = async (id: number) => {
+  const { data, error } = await supabase
+    .from("meals")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
+
+  if (error) throw error;
+  return data;
 };
 
-export const addMeal = async ({ title, description, price }: MealDto) => {
-  "use server";
-  await timeout();
-  const query = db.prepare<[string, string, number], Meal>(
-    "INSERT INTO meals (title, description, price) VALUES (?, ?, ?)"
-  );
-  return query.run(title, description, price);
+export const addMeal = async (meal: MealDto) => {
+  const { data, error } = await supabase
+    .from("meals")
+    .insert([meal])
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
 };
 
 export const deleteMeal = async (id: number) => {
-  "use server";
-  await timeout();
-  const query = db.prepare<[number]>("DELETE FROM meals WHERE id = ?");
-  return query.run(id);
+  const { data, error } = await supabase.from("meals").delete().eq("id", id);
+
+  if (error) throw error;
+  return data;
 };

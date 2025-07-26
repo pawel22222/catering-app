@@ -7,7 +7,7 @@ type Props = {
 
 export default async function Page({ params }: Props) {
   const { id } = await params;
-  const meal = await getMealById(id);
+  const meal = await getMealById(Number(id));
 
   if (!meal) notFound();
 

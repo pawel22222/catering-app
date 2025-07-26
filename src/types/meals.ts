@@ -1,8 +1,5 @@
-export type Meal = {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-};
-export type MealShort = Omit<Meal, "description">;
-export type MealDto = Omit<Meal, "id">;
+import { Database } from "./supabase";
+
+export type Meal = Database["public"]["Tables"]["meals"]["Row"];
+export type MealShort = Omit<Meal, "created_at" | "description">;
+export type MealDto = Omit<Meal, "id" | "created_at">;
